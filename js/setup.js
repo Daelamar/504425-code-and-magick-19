@@ -96,8 +96,9 @@ var renderWizard = function (wizards) {
 // Отрисуем магов на странице
 var getWizardsList = function (array) {
   for (var t = 0; t < array.length; t++) {
-    wizardListElement.appendChild(renderWizard(array[t]));
+    fragment.appendChild(renderWizard(array[t]));
   }
+  wizardListElement.appendChild(fragment);
 };
 
 getWizardsArr(SIMILAR_WIZARDS);
