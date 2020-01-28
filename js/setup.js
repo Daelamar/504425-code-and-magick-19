@@ -1,24 +1,18 @@
 'use strict';
-
+// Колличество похожих магов
 var SIMILAR_WIZARDS = 4;
 
-// Находим окно персонажа и показываем его
+// Находим окно статистики
 var setup = document.querySelector('.setup');
-setup.classList.remove('hidden');
 
-// Находим окно похожих магов
+// Находим окно с похожими магами
+var setupWizards = document.querySelector('.setup-similar');
+
+// Находим список похожих магов
 var wizardListElement = document.querySelector('.setup-similar-list');
 
 // Находим шаблон для копирования магов
-var wizardTemplate = document.querySelector('#similar-wizard-template')
-  .content
-  .querySelector('.setup-similar-item');
-
-// Создаем фрагмент
-var fragment = document.createDocumentFragment();
-
-// Создаем пустой массив, куда будем скидывать похожих магов
-var wizardsArr = [];
+var wizardTemplate = document.querySelector('#similar-wizard-template').content.querySelector('.setup-similar-item');
 
 // Создаем массив имен
 var names = [
@@ -64,46 +58,70 @@ var eyeColors = [
 ];
 
 // Функция случайного числа в диапазоне
-var getRandom = function (min, max) {
+var getRandomNumber = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-// Создаем 4х похожих магов и пушим их в массив
+// Функция возврата случайного элемента из массива
+var getRandomItem = function (array) {
+  return array[getRandomNumber(0, array.length - 1)];
+};
 
-var getWizardsArr = function (number) {
+// Функция открытия окна статистики
+var showSetupWindow = function () {
+  setup.classList.remove('hidden');
+};
+
+// Функция закрытия окна статистики
+var hideSetupWindow = function () {
+  setup.classList.add('hidden');
+};
+
+// Функция открытия окна похожих магов
+var showSimilarWizardsBlock = function () {
+  setupWizards.classList.remove('hidden');
+};
+
+// Функция закрытия окна похожих магов
+var hideSimilarWizardsBlock = function () {
+  setupWizards.classList.add('hidden');
+};
+
+// Функция создания похожих магов и добавления их в массив
+var createWizards = function (number) {
+  var wizardsArr = [];
   for (var i = 1; i <= number; i++) {
     var wizard = {
-      name: names[getRandom(0, names.length - 1)] + ' ' + secondNames[getRandom(0, secondNames.length - 1)],
-      coatColor: mantleColors[getRandom(0, mantleColors.length - 1)],
-      eyesColor: eyeColors[getRandom(0, eyeColors.length - 1)]
+      name: getRandomItem(names) + ' ' + getRandomItem(secondNames),
+      coatColor: getRandomItem(mantleColors),
+      eyesColor: getRandomItem(eyeColors)
     };
     wizardsArr.push(wizard);
   }
   return wizardsArr;
 };
 
-// Функция создания мага ( рендеринг имени,цветов )
-var renderWizard = function (wizards) {
+// Функция заполнения html-элементов похожего мага ( цвет,имя и т.д )
+var createWizardElement = function (wizard) {
   var wizardElement = wizardTemplate.cloneNode(true);
 
-  wizardElement.querySelector('.setup-similar-label').textContent = wizards.name;
-  wizardElement.querySelector('.wizard-coat').style.fill = wizards.coatColor;
-  wizardElement.querySelector('.wizard-eyes').style.fill = wizards.eyesColor;
+  wizardElement.querySelector('.setup-similar-label').textContent = wizard.name;
+  wizardElement.querySelector('.wizard-coat').style.fill = wizard.coatColor;
+  wizardElement.querySelector('.wizard-eyes').style.fill = wizard.eyesColor;
 
   return wizardElement;
 };
 
-// Отрисуем магов на странице
-var getWizardsList = function (array) {
-  for (var t = 0; t < array.length; t++) {
-    fragment.appendChild(renderWizard(array[t]));
+// Функция рендоринга магов на странице
+var renderSimilarWizards = function (wizardObjects) {
+  var fragment = document.createDocumentFragment();
+  for (var t = 0; t < wizardObjects.length; t++) {
+    fragment.appendChild(createWizardElement(wizardObjects[t]));
   }
   wizardListElement.appendChild(fragment);
 };
 
-getWizardsArr(SIMILAR_WIZARDS);
-getWizardsList(wizardsArr);
-
-// Показываем окно с похожими магами
-var setupWizards = document.querySelector('.setup-similar');
-setupWizards.classList.remove('hidden');
+// Вызываем функции
+showSetupWindow();
+renderSimilarWizards(createWizards(SIMILAR_WIZARDS));
+showSimilarWizardsBlock();
