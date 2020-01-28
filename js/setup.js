@@ -73,9 +73,9 @@ var showSetupWindow = function () {
 };
 
 // Функция закрытия окна статистики
-var hideSetupWindow = function () {
-  setup.classList.add('hidden');
-};
+// var hideSetupWindow = function () {
+//   setup.classList.add('hidden');
+// };
 
 // Функция открытия окна похожих магов
 var showSimilarWizardsBlock = function () {
@@ -83,9 +83,9 @@ var showSimilarWizardsBlock = function () {
 };
 
 // Функция закрытия окна похожих магов
-var hideSimilarWizardsBlock = function () {
-  setupWizards.classList.add('hidden');
-};
+// var hideSimilarWizardsBlock = function () {
+//   setupWizards.classList.add('hidden');
+// };
 
 // Функция создания похожих магов и добавления их в массив
 var createWizards = function (number) {
