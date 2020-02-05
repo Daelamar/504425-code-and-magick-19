@@ -146,6 +146,23 @@ var createWizards = function (number) {
   return wizardsArr;
 };
 
+// Функция для получения функции по переборке массива по кругу
+var getNextNumberFromArray = function (array, index) {
+  return function () {
+    index++;
+    if (index === array.length) {
+      index = 0;
+    }
+    return array[index];
+  };
+};
+
+// Присваеваем переменной вызов функции и передаем параметры для создания окружения на момент вызова
+// Для цвета фаербола
+var fireballColorCount = getNextNumberFromArray(fireballColors, -1);
+// Для цвета глаз
+var eyeColorCount = getNextNumberFromArray(eyeColors, -1);
+
 // Функция заполнения html-элементов похожего мага ( цвет,имя и т.д )
 var createWizardElement = function (wizard) {
   var wizardElement = wizardTemplate.cloneNode(true);
@@ -203,7 +220,7 @@ userNameField.addEventListener('keydown', function (evt) {
 });
 
 userWizardFireball.addEventListener('click', function () {
-  userWizardFireball.style.background = getRandomItem(fireballColors);
+  userWizardFireball.style.background = fireballColorCount();
   userWizardFireballInput.value = userWizardFireball.style.background;
 });
 
@@ -212,7 +229,7 @@ userWizard.addEventListener('click', function (evt) {
     userWizardCoat.style.fill = getRandomItem(mantleColors);
     userWizardCoatInput.value = userWizardCoat.style.fill;
   } else if (evt.target === userWizardEyes) {
-    userWizardEyes.style.fill = getRandomItem(eyeColors);
+    userWizardEyes.style.fill = eyeColorCount();
     userWizardEyesInput.value = userWizardEyes.style.fill;
   }
 });
