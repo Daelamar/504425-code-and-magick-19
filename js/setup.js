@@ -32,8 +32,7 @@ var userNameField = setup.querySelector('.setup-user-name');
 var userWizard = setup.querySelector('.setup-wizard');
 var userWizardEyes = userWizard.querySelector('.wizard-eyes');
 var userWizardCoat = userWizard.querySelector('.wizard-coat');
-var userWizardFireballWrap = setup.querySelector('.setup-fireball-wrap');
-var userWizardFirebal = setup.querySelector('.setup-fireball');
+var userWizardFireball = setup.querySelector('.setup-fireball-wrap');
 
 // Находим нужные нам скрытые инпуты
 var userWizardEyesInput = setup.querySelector('[name="eyes-color"]');
@@ -104,23 +103,23 @@ var getRandomItem = function (array) {
 
 // Функция закрытия окна по нажатию ESC
 var onEscCloseSetupHandler = function (evt) {
-  if (evt.keyCode === ESC_KEY && userNameField !== evt.target) {
+  if (evt.keyCode === ESC_KEY) {
     hideSetupWindowHandler();
   }
 };
 
 // Функция открытия окна статистики
 var showSetupWindowHandler = function () {
-  setup.classList.remove('hidden');
   document.addEventListener('keydown', onEscCloseSetupHandler);
+  setup.classList.remove('hidden');
   userNameField.addEventListener('input', userNameFieldValidityHandler);
 };
 
 // Функция закрытия окна статистики
 var hideSetupWindowHandler = function () {
   setup.classList.add('hidden');
-  document.removeEventListener('keydown', onEscCloseSetupHandler);
   userNameField.removeEventListener('input', userNameFieldValidityHandler);
+  document.removeEventListener('keydown', onEscCloseSetupHandler);
 };
 
 // Функция открытия окна похожих магов
@@ -196,11 +195,16 @@ setupCloseButton.addEventListener('keydown', function (evt) {
   }
 });
 
-setup.addEventListener('click', function (evt) {
-  if (evt.target === userWizardFirebal) {
-    userWizardFireballWrap.style.background = getRandomItem(fireballColors);
-    userWizardFireballInput.value = userWizardFireballWrap.style.background;
+// Этим обработчиком запрещаем всплытие события ( закрытие по ESC ), если таргет = инпут
+userNameField.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === ESC_KEY) {
+    evt.stopPropagation();
   }
+});
+
+userWizardFireball.addEventListener('click', function () {
+  userWizardFireball.style.background = getRandomItem(fireballColors);
+  userWizardFireballInput.value = userWizardFireball.style.background;
 });
 
 userWizard.addEventListener('click', function (evt) {
