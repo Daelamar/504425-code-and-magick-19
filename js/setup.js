@@ -185,15 +185,16 @@ var renderSimilarWizards = function (wizardObjects) {
 // Функция валидности поля имени
 var userNameFieldValidityHandler = function (evt) {
   var target = evt.target;
-  if (target.value.length < MIN_NAME_LENGTH) {
-    target.setCustomValidity('Имя персонажа должно содержать не меньше ' + MIN_NAME_LENGTH + '-х символов!');
-  } else if (target.value.length > MAX_NAME_LENGTH) {
-    target.setCustomValidity('Имя персонажа не должно содержать более ' + MAX_NAME_LENGTH + '-ти символов!');
-  } else if (target.value.length === 0) {
+  if (target.value.length === 0) {
     target.setCustomValidity('Обязательное поле!');
+  } else if (target.value.length < MIN_NAME_LENGTH) {
+    target.setCustomValidity('Имя Вашего персонажа должно содержать не меньше ' + MIN_NAME_LENGTH + '-х символов!');
+  } else if (target.value.length > MAX_NAME_LENGTH) {
+    target.setCustomValidity('Имя Вашего персонажа не должно содержать более ' + MAX_NAME_LENGTH + '-ти символов!');
   } else {
     target.setCustomValidity('');
   }
+  console.log(target.value);
 };
 
 // Вешаем обработчики
