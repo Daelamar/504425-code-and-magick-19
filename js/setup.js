@@ -118,7 +118,6 @@ var showSetupWindowHandler = function () {
 // Функция закрытия окна статистики
 var hideSetupWindowHandler = function () {
   setup.classList.add('hidden');
-  userNameField.removeEventListener('input', userNameFieldValidityHandler);
   document.removeEventListener('keydown', onEscCloseSetupHandler);
 };
 
@@ -224,14 +223,14 @@ userWizardFireball.addEventListener('click', function () {
   userWizardFireballInput.value = userWizardFireball.style.background;
 });
 
-userWizard.addEventListener('click', function (evt) {
-  if (evt.target === userWizardCoat) {
-    userWizardCoat.style.fill = getRandomItem(mantleColors);
-    userWizardCoatInput.value = userWizardCoat.style.fill;
-  } else if (evt.target === userWizardEyes) {
-    userWizardEyes.style.fill = eyeColorCount();
-    userWizardEyesInput.value = userWizardEyes.style.fill;
-  }
+userWizardCoat.addEventListener('click', function () {
+  userWizardCoat.style.fill = getRandomItem(mantleColors);
+  userWizardCoatInput.value = userWizardCoat.style.fill;
+});
+
+userWizardEyes.addEventListener('click', function () {
+  userWizardEyes.style.fill = eyeColorCount();
+  userWizardEyesInput.value = userWizardEyes.style.fill;
 });
 
 // Вызываем функции
