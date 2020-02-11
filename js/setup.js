@@ -194,7 +194,6 @@ var userNameFieldValidityHandler = function (evt) {
   } else {
     target.setCustomValidity('');
   }
-  console.log(target.value);
 };
 
 // Вешаем обработчики
