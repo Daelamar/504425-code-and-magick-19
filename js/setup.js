@@ -55,6 +55,7 @@
 
     var dragged = false;
 
+    // Находим координаты нажатия мыши
     var startCoords = {
       x: evt.clientX,
       y: evt.clientY
@@ -64,10 +65,13 @@
       moveEvt.preventDefault();
       dragged = true;
 
+      // Находим координаты движения ( стартовые - нынешние )
       var shift = {
-        x: evt.clientX - moveEvt.clientX,
-        y: evt.clientX - moveEvt.clientY
+        x: startCoords.x - moveEvt.clientX,
+        y: startCoords.y - moveEvt.clientY
       };
+
+      // Перезаписываем стартовые
 
       startCoords.x = moveEvt.clientX;
       startCoords.y = moveEvt.clientY;
@@ -79,9 +83,6 @@
     var mouseUpHandler = function (upEvt) {
       upEvt.preventDefault();
 
-      document.removeEventListener('mousemove', mouseMoveHandler);
-      document.removeEventListener('mouseup', mouseUpHandler);
-
       if (dragged) {
         var clickPreventDefaultHandler = function (clickEvt) {
           clickEvt.preventDefault();
@@ -89,6 +90,9 @@
         };
         uploadField.addEventListener('click', clickPreventDefaultHandler);
       }
+
+      document.removeEventListener('mousemove', mouseMoveHandler);
+      document.removeEventListener('mouseup', mouseUpHandler);
     };
 
     document.addEventListener('mousemove', mouseMoveHandler);
