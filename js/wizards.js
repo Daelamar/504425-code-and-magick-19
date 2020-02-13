@@ -5,7 +5,7 @@
   var SIMILAR_WIZARDS = 4;
 
   // Находим окно с похожими магами
-  var setupWizards = document.querySelector('.setup-similar');
+  var setupWizardsElement = document.querySelector('.setup-similar');
 
   // Находим список похожих магов
   var wizardListElement = document.querySelector('.setup-similar-list');
@@ -39,7 +39,7 @@
 
   // Функция открытия окна похожих магов
   var showSimilarWizardsBlock = function () {
-    setupWizards.classList.remove('hidden');
+    setupWizardsElement.classList.remove('hidden');
   };
 
   // Функция создания похожих магов и добавления их в массив
@@ -47,9 +47,9 @@
     var wizardsArr = [];
     for (var i = 1; i <= number; i++) {
       var wizard = {
-        name: window.util.getRandomItem(names) + ' ' + window.util.getRandomItem(secondNames),
-        coatColor: window.util.getRandomItem(window.form.mantleColors),
-        eyesColor: window.util.getRandomItem(window.form.eyeColors),
+        name: window.utils.getRandomItem(names) + ' ' + window.utils.getRandomItem(secondNames),
+        coatColor: window.utils.getRandomItem(window.user.mantleColors),
+        eyesColor: window.utils.getRandomItem(window.user.eyeColors),
       };
       wizardsArr.push(wizard);
     }
@@ -76,6 +76,15 @@
     wizardListElement.appendChild(fragment);
   };
 
-  renderSimilarWizards(createWizards(SIMILAR_WIZARDS));
+  // Функция для отображения магов на страницы ( для дальнейшей передачи в глобальную ОВ )
+  var show = function () {
+    renderSimilarWizards(createWizards(SIMILAR_WIZARDS));
+  };
+
   showSimilarWizardsBlock();
+
+  // Для передачи в другие модули
+  window.wizards = {
+    show: show,
+  };
 })();

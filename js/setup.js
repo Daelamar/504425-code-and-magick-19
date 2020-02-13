@@ -1,23 +1,31 @@
 'use strict';
 (function () {
+  // Ограничение окна по координатам
+  var setupRestriction = {
+    COORDS_MIN_Y: 10,
+    COORDS_MAX_Y: 800,
+    COORDS_MIN_X: 410,
+    COORDS_MAX_X: 1490,
+  };
+
   // Находим окно статистики
-  var setup = document.querySelector('.setup');
+  var setupElement = document.querySelector('.setup');
 
   // Находим блок с фото пользователя для открытия окна статистики
-  var setupOpenButton = document.querySelector('.setup-open-icon');
+  var setupOpenButtonElement = document.querySelector('.setup-open-icon');
 
   // Находим кнопку для закрытия окна статистики
-  var setupCloseButton = setup.querySelector('.setup-close');
+  var setupCloseButtonElement = setupElement.querySelector('.setup-close');
 
   // Находим поле для имени
-  var userNameField = setup.querySelector('.setup-user-name');
+  var userNameFieldElement = setupElement.querySelector('.setup-user-name');
 
   // Находим блок , за который будем перемещать окно статистики
-  var uploadField = setup.querySelector('.upload');
+  var uploadFieldElement = setupElement.querySelector('.upload');
 
   // Функция закрытия окна по нажатию ESC
   var onEscCloseSetupHandler = function (evt) {
-    if (evt.keyCode === window.util.ESC_KEY) {
+    if (evt.keyCode === window.utils.ESC_KEY_CODE) {
       hideSetupWindowHandler();
     }
   };
@@ -25,32 +33,37 @@
   // Функция открытия окна статистики
   var showSetupWindowHandler = function () {
     document.addEventListener('keydown', onEscCloseSetupHandler);
-    setup.classList.remove('hidden');
-    userNameField.addEventListener('input', window.form.userNameFieldValidityHandler);
+    window.wizards.show();
+    setupElement.classList.remove('hidden');
+
   };
 
   // Функция закрытия окна статистики
   var hideSetupWindowHandler = function () {
-    setup.classList.add('hidden');
+    setupElement.classList.add('hidden');
     document.removeEventListener('keydown', onEscCloseSetupHandler);
   };
 
-  setupOpenButton.addEventListener('click', showSetupWindowHandler);
-  setupOpenButton.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === window.util.ENTER_KEY) {
+  userNameFieldElement.addEventListener('input', function (evt) {
+    window.user.validate(evt);
+  });
+
+  setupOpenButtonElement.addEventListener('click', showSetupWindowHandler);
+  setupOpenButtonElement.addEventListener('keydown', function (evt) {
+    if (evt.keyCode === window.utils.ENTER_KEY_CODE) {
       showSetupWindowHandler();
     }
   });
 
-  setupCloseButton.addEventListener('click', hideSetupWindowHandler);
-  setupCloseButton.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === window.util.ENTER_KEY) {
+  setupCloseButtonElement.addEventListener('click', hideSetupWindowHandler);
+  setupCloseButtonElement.addEventListener('keydown', function (evt) {
+    if (evt.keyCode === window.utils.ENTER_KEY_CODE) {
       hideSetupWindowHandler();
     }
   });
 
   // Обработчик для перемещения окна статистики
-  uploadField.addEventListener('mousedown', function (evt) {
+  uploadFieldElement.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
 
     var dragged = false;
@@ -58,8 +71,9 @@
     // Находим координаты нажатия мыши
     var startCoords = {
       x: evt.clientX,
-      y: evt.clientY
+      y: evt.clientY,
     };
+
 
     var mouseMoveHandler = function (moveEvt) {
       moveEvt.preventDefault();
@@ -68,16 +82,20 @@
       // Находим координаты движения ( стартовые - нынешние )
       var shift = {
         x: startCoords.x - moveEvt.clientX,
-        y: startCoords.y - moveEvt.clientY
+        y: startCoords.y - moveEvt.clientY,
       };
 
       // Перезаписываем стартовые
-
       startCoords.x = moveEvt.clientX;
       startCoords.y = moveEvt.clientY;
 
-      setup.style.top = (setup.offsetTop - shift.y) + 'px';
-      setup.style.left = (setup.offsetLeft - shift.x) + 'px';
+      if (((setupElement.offsetTop - shift.y) > setupRestriction.COORDS_MIN_Y) && ((setupElement.offsetTop - shift.y) < setupRestriction.COORDS_MAX_Y)) {
+        setupElement.style.top = (setupElement.offsetTop - shift.y) + 'px';
+      }
+
+      if (((setupElement.offsetLeft - shift.x) > setupRestriction.COORDS_MIN_X) && ((setupElement.offsetLeft - shift.x) < setupRestriction.COORDS_MAX_X)) {
+        setupElement.style.left = (setupElement.offsetLeft - shift.x) + 'px';
+      }
     };
 
     var mouseUpHandler = function (upEvt) {
@@ -86,9 +104,9 @@
       if (dragged) {
         var clickPreventDefaultHandler = function (clickEvt) {
           clickEvt.preventDefault();
-          uploadField.removeEventListener('click', clickPreventDefaultHandler);
+          uploadFieldElement.removeEventListener('click', clickPreventDefaultHandler);
         };
-        uploadField.addEventListener('click', clickPreventDefaultHandler);
+        uploadFieldElement.addEventListener('click', clickPreventDefaultHandler);
       }
 
       document.removeEventListener('mousemove', mouseMoveHandler);

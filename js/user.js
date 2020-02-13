@@ -5,21 +5,21 @@
   var MAX_NAME_LENGTH = 25;
 
   // Находим окно статистики
-  var setup = document.querySelector('.setup');
+  var setupElement = document.querySelector('.setup');
 
   // Находим поле для имени
-  var userNameField = setup.querySelector('.setup-user-name');
+  var userNameFieldElement = setupElement.querySelector('.setup-user-name');
 
   // Находим своего персонажа в окне статистики и нужные нам элементы (плащ, фаербол и т.д.)
-  var userWizard = setup.querySelector('.setup-wizard');
-  var userWizardEyes = userWizard.querySelector('.wizard-eyes');
-  var userWizardCoat = userWizard.querySelector('.wizard-coat');
-  var userWizardFireball = setup.querySelector('.setup-fireball-wrap');
+  var userWizardElement = setupElement.querySelector('.setup-wizard');
+  var userWizardEyesElement = userWizardElement.querySelector('.wizard-eyes');
+  var userWizardCoatElement = userWizardElement.querySelector('.wizard-coat');
+  var userWizardFireballElement = setupElement.querySelector('.setup-fireball-wrap');
 
   // Находим нужные нам скрытые инпуты
-  var userWizardEyesInput = setup.querySelector('[name="eyes-color"]');
-  var userWizardCoatInput = setup.querySelector('[name="coat-color"]');
-  var userWizardFireballInput = setup.querySelector('[name="fireball-color"]');
+  var userWizardEyesInputElement = setupElement.querySelector('[name="eyes-color"]');
+  var userWizardCoatInputElement = setupElement.querySelector('[name="coat-color"]');
+  var userWizardFireballInputElement = setupElement.querySelector('[name="fireball-color"]');
 
   // Создаем массив цветов для фаербола
   var fireballColors = [
@@ -51,9 +51,11 @@
 
   // Присваеваем переменной вызов функции и передаем параметры для создания окружения на момент вызова
   // Для цвета фаербола
-  var fireballColorCount = window.util.getNextNumberFromArray(fireballColors, -1);
+  var getNextFireballColor = window.utils.getNextNumberFromArray(fireballColors, -1);
   // Для цвета глаз
-  var eyeColorCount = window.util.getNextNumberFromArray(eyeColors, -1);
+  var getNextEyeColor = window.utils.getNextNumberFromArray(eyeColors, -1);
+  // Для цвета мантии
+  var getNextMantleColor = window.utils.getNextNumberFromArray(mantleColors, -1);
 
   // Функция валидности поля имени
   var userNameFieldValidityHandler = function (evt) {
@@ -70,31 +72,31 @@
   };
 
   // Этим обработчиком запрещаем всплытие события ( закрытие по ESC ), если таргет = инпут
-  userNameField.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === window.util.ESC_KEY) {
+  userNameFieldElement.addEventListener('keydown', function (evt) {
+    if (evt.keyCode === window.utils.ESC_KEY_CODE) {
       evt.stopPropagation();
     }
   });
 
-  userWizardFireball.addEventListener('click', function () {
-    userWizardFireball.style.background = fireballColorCount();
-    userWizardFireballInput.value = userWizardFireball.style.background;
+  userWizardFireballElement.addEventListener('click', function () {
+    userWizardFireballElement.style.background = getNextFireballColor();
+    userWizardFireballInputElement.value = userWizardFireballElement.style.background;
   });
 
-  userWizardCoat.addEventListener('click', function () {
-    userWizardCoat.style.fill = window.util.getRandomItem(mantleColors);
-    userWizardCoatInput.value = userWizardCoat.style.fill;
+  userWizardCoatElement.addEventListener('click', function () {
+    userWizardCoatElement.style.fill = getNextMantleColor();
+    userWizardCoatInputElement.value = userWizardCoatElement.style.fill;
   });
 
-  userWizardEyes.addEventListener('click', function () {
-    userWizardEyes.style.fill = eyeColorCount();
-    userWizardEyesInput.value = userWizardEyes.style.fill;
+  userWizardEyesElement.addEventListener('click', function () {
+    userWizardEyesElement.style.fill = getNextEyeColor();
+    userWizardEyesInputElement.value = userWizardEyesElement.style.fill;
   });
 
   // Для передачи в другие модули
-  window.form = {
-    userNameFieldValidityHandler: userNameFieldValidityHandler,
+  window.user = {
+    validate: userNameFieldValidityHandler,
     mantleColors: mantleColors,
-    eyeColors: eyeColors
+    eyeColors: eyeColors,
   };
 })();
