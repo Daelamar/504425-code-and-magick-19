@@ -5,21 +5,21 @@
   var MAX_NAME_LENGTH = 25;
 
   // Находим окно статистики
-  var setupElement = document.querySelector('.setup');
+  var setupPopupElement = document.querySelector('.setup');
 
   // Находим поле для имени
-  var userNameFieldElement = setupElement.querySelector('.setup-user-name');
+  var nameFieldElement = setupPopupElement.querySelector('.setup-user-name');
 
   // Находим своего персонажа в окне статистики и нужные нам элементы (плащ, фаербол и т.д.)
-  var userWizardElement = setupElement.querySelector('.setup-wizard');
-  var userWizardEyesElement = userWizardElement.querySelector('.wizard-eyes');
-  var userWizardCoatElement = userWizardElement.querySelector('.wizard-coat');
-  var userWizardFireballElement = setupElement.querySelector('.setup-fireball-wrap');
+  var wizardElement = setupPopupElement.querySelector('.setup-wizard');
+  var wizardEyesElement = wizardElement.querySelector('.wizard-eyes');
+  var wizardCoatElement = wizardElement.querySelector('.wizard-coat');
+  var wizardFireballElement = setupPopupElement.querySelector('.setup-fireball-wrap');
 
   // Находим нужные нам скрытые инпуты
-  var userWizardEyesInputElement = setupElement.querySelector('[name="eyes-color"]');
-  var userWizardCoatInputElement = setupElement.querySelector('[name="coat-color"]');
-  var userWizardFireballInputElement = setupElement.querySelector('[name="fireball-color"]');
+  var wizardEyesInputElement = setupPopupElement.querySelector('[name="eyes-color"]');
+  var wizardCoatInputElement = setupPopupElement.querySelector('[name="coat-color"]');
+  var wizardFireballInputElement = setupPopupElement.querySelector('[name="fireball-color"]');
 
   // Создаем массив цветов для фаербола
   var fireballColors = [
@@ -58,7 +58,7 @@
   var getNextMantleColor = window.utils.getNextNumberFromArray(mantleColors, -1);
 
   // Функция валидности поля имени
-  var userNameFieldValidityHandler = function (evt) {
+  var nameFieldValidityHandler = function (evt) {
     var target = evt.target;
     if (target.value.length === 0) {
       target.setCustomValidity('Обязательное поле!');
@@ -72,30 +72,30 @@
   };
 
   // Этим обработчиком запрещаем всплытие события ( закрытие по ESC ), если таргет = инпут
-  userNameFieldElement.addEventListener('keydown', function (evt) {
+  nameFieldElement.addEventListener('keydown', function (evt) {
     if (evt.keyCode === window.utils.ESC_KEY_CODE) {
       evt.stopPropagation();
     }
   });
 
-  userWizardFireballElement.addEventListener('click', function () {
-    userWizardFireballElement.style.background = getNextFireballColor();
-    userWizardFireballInputElement.value = userWizardFireballElement.style.background;
+  wizardFireballElement.addEventListener('click', function () {
+    wizardFireballElement.style.background = getNextFireballColor();
+    wizardFireballInputElement.value = wizardFireballElement.style.background;
   });
 
-  userWizardCoatElement.addEventListener('click', function () {
-    userWizardCoatElement.style.fill = getNextMantleColor();
-    userWizardCoatInputElement.value = userWizardCoatElement.style.fill;
+  wizardCoatElement.addEventListener('click', function () {
+    wizardCoatElement.style.fill = getNextMantleColor();
+    wizardCoatInputElement.value = wizardCoatElement.style.fill;
   });
 
-  userWizardEyesElement.addEventListener('click', function () {
-    userWizardEyesElement.style.fill = getNextEyeColor();
-    userWizardEyesInputElement.value = userWizardEyesElement.style.fill;
+  wizardEyesElement.addEventListener('click', function () {
+    wizardEyesElement.style.fill = getNextEyeColor();
+    wizardEyesInputElement.value = wizardEyesElement.style.fill;
   });
 
   // Для передачи в другие модули
   window.user = {
-    validate: userNameFieldValidityHandler,
+    validate: nameFieldValidityHandler,
     mantleColors: mantleColors,
     eyeColors: eyeColors,
   };
