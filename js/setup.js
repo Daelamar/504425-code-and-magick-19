@@ -23,6 +23,9 @@
   // Находим блок , за который будем перемещать окно статистики
   var uploadFieldElement = popupElement.querySelector('.upload');
 
+  // Находим форму
+  var formElement = popupElement.querySelector('.setup-wizard-form');
+
   // Функция закрытия окна по нажатию ESC
   var onEscClosePopupHandler = function (evt) {
     if (evt.keyCode === window.utils.ESC_KEY_CODE) {
@@ -114,6 +117,14 @@
 
     document.addEventListener('mousemove', mouseMoveHandler);
     document.addEventListener('mouseup', mouseUpHandler);
+  });
+
+  // Обработчик для отправки формы
+  formElement.addEventListener('submit', function (evt) {
+    window.backend.save(new FormData(formElement), hidePopupWindowHandler, window.utils.onError);
+    evt.preventDefault();
+    console.log('Данные ушли');
+    console.log(window.utils.onError);
   });
 })();
 
