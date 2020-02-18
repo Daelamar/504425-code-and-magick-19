@@ -3,6 +3,7 @@
 (function () {
   // Адресс сервера, на который должны отправиться данные
   var URL_UPLOAD = 'https://js.dump.academy/code-and-magick';
+  var URL_DOWNLOAD = 'https://js.dump.academy/code-and-magick/data';
 
   // Значение времени ожидания
   var TIMEOUT = 10000;
@@ -71,8 +72,19 @@
     xhr.send(data);
   };
 
+  var downloadData = function (onSuccess, onError) {
+    var xhr = setupHttpRequest(onSuccess, onError);
+
+    // Инициируем запрос
+    xhr.open('GET', URL_DOWNLOAD);
+
+    // Отправляем
+    xhr.send();
+  };
+
   // Для передачи в другие модули
   window.backend = {
     save: uploadData,
+    load: downloadData
   };
 })();
