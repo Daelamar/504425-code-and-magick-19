@@ -123,9 +123,5 @@
   formElement.addEventListener('submit', function (evt) {
     window.backend.save(new FormData(formElement), hidePopupWindowHandler, window.utils.onError);
     evt.preventDefault();
-    console.log('Данные ушли');
-    console.log(window.utils.onError);
   });
 })();
-
-
