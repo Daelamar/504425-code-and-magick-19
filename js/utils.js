@@ -25,10 +25,35 @@
     };
   };
 
+  // Функция создания сообщения об ошибке ( при загрузке/отправке данных )
+  var showErrorMessageHandler = function (errorMessage) {
+    var errorElement = document.createElement('div');
+    errorElement.classList.add('error-message');
+    errorElement.style.backgroundColor = 'white';
+    errorElement.style.color = 'black';
+    errorElement.style.textAlign = 'center';
+    errorElement.style.position = 'fixed';
+    errorElement.style.width = '400px';
+    errorElement.style.height = '100px';
+    errorElement.style.border = '4px solid black';
+    errorElement.style.left = '39%';
+    errorElement.style.top = '20%';
+    errorElement.style.fontSize = '28px';
+    errorElement.style.zIndex = '10';
+    errorElement.textContent = errorMessage;
+    document.body.appendChild(errorElement);
+    document.addEventListener('keydown', function (evt) {
+      if (evt.keyCode === ESC_KEY_CODE) {
+        errorElement.remove();
+      }
+    });
+  };
+
   // Для передачи в другие модули
   window.utils = {
     getRandomItem: getRandomItem,
     getNextNumberFromArray: getNextNumberFromArray,
+    onError: showErrorMessageHandler,
     ESC_KEY_CODE: ESC_KEY_CODE,
     ENTER_KEY_CODE: ENTER_KEY_CODE,
   };

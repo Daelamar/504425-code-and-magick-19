@@ -2,17 +2,18 @@
 
 (function () {
   // Колличество похожих магов
-  var SIMILAR_WIZARDS = 4;
+  var MAX_MAGES_COUNT = 4;
 
   // Находим окно с похожими магами
-  var setupWizardsElement = document.querySelector('.setup-similar');
+  var magesFieldElement = document.querySelector('.setup-similar');
 
   // Находим список похожих магов
-  var wizardListElement = document.querySelector('.setup-similar-list');
+  var listElement = document.querySelector('.setup-similar-list');
 
   // Находим шаблон для копирования магов
-  var wizardTemplate = document.querySelector('#similar-wizard-template').content.querySelector('.setup-similar-item');
+  var template = document.querySelector('#similar-wizard-template').content.querySelector('.setup-similar-item');
 
+  /*
   // Создаем массив имен похожих магов
   var names = [
     'Иван',
@@ -36,14 +37,16 @@
     'Нионго',
     'Ирвинг',
   ];
+   */
 
   // Функция открытия окна похожих магов
-  var showSimilarWizardsBlock = function () {
-    setupWizardsElement.classList.remove('hidden');
+  var showMages = function () {
+    magesFieldElement.classList.remove('hidden');
   };
 
+  /*
   // Функция создания похожих магов и добавления их в массив
-  var createWizards = function (number) {
+  var create = function (number) {
     var wizardsArr = [];
     for (var i = 1; i <= number; i++) {
       var wizard = {
@@ -55,36 +58,33 @@
     }
     return wizardsArr;
   };
+*/
 
   // Функция заполнения html-элементов похожего мага ( цвет,имя и т.д )
-  var createWizardElement = function (wizard) {
-    var wizardElement = wizardTemplate.cloneNode(true);
+  var createElements = function (wizard) {
+    var wizardElement = template.cloneNode(true);
 
     wizardElement.querySelector('.setup-similar-label').textContent = wizard.name;
-    wizardElement.querySelector('.wizard-coat').style.fill = wizard.coatColor;
-    wizardElement.querySelector('.wizard-eyes').style.fill = wizard.eyesColor;
+    wizardElement.querySelector('.wizard-coat').style.fill = wizard.colorCoat; // Переделали, так как в данных сервера именно такое свойство
+    wizardElement.querySelector('.wizard-eyes').style.fill = wizard.eyesColor; // Белым цветом потому, что пока этих данных нет, но они придут с сервера
 
     return wizardElement;
   };
 
   // Функция рендоринга магов на странице
-  var renderSimilarWizards = function (wizardObjects) {
+  var render = function (wizardObjects) {
     var fragment = document.createDocumentFragment();
-    for (var t = 0; t < wizardObjects.length; t++) {
-      fragment.appendChild(createWizardElement(wizardObjects[t]));
+    for (var t = 0; t < MAX_MAGES_COUNT; t++) {
+      fragment.appendChild(createElements(window.utils.getRandomItem(wizardObjects)));
     }
-    wizardListElement.appendChild(fragment);
+    listElement.appendChild(fragment);
   };
 
-  // Функция для отображения магов на страницы ( для дальнейшей передачи в глобальную ОВ )
-  var show = function () {
-    renderSimilarWizards(createWizards(SIMILAR_WIZARDS));
-  };
-
-  showSimilarWizardsBlock();
+  // Загружаем данные и при положительном результате отрисовываем волшебников
+  window.backend.load(render, window.utils.onError);
 
   // Для передачи в другие модули
   window.wizards = {
-    show: show,
+    show: showMages,
   };
 })();
