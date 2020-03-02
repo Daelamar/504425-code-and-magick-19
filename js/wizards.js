@@ -13,6 +13,9 @@
   // Находим шаблон для копирования магов
   var template = document.querySelector('#similar-wizard-template').content.querySelector('.setup-similar-item');
 
+  // Пустой массив для сохранения данных о магах
+  var similarMages = [];
+
   /*
   // Создаем массив имен похожих магов
   var names = [
@@ -74,17 +77,42 @@
   // Функция рендоринга магов на странице
   var render = function (wizardObjects) {
     var fragment = document.createDocumentFragment();
+    listElement.innerHTML = '';
     for (var t = 0; t < MAX_MAGES_COUNT; t++) {
       fragment.appendChild(createElements(window.utils.getRandomItem(wizardObjects)));
     }
     listElement.appendChild(fragment);
   };
 
+  // Функция приема данных с сервера и сохранения их в массив
+  var successHandler = function (data) {
+    similarMages = data;
+    update();
+  };
+
+  var update = function () {
+    var sameCoatMages = similarMages.filter(function (it) {
+      return it.colorCoat === window.user.coatColor;
+    });
+    var sameEyesMages = similarMages.filter(function (it) {
+      return it.colorEyes === window.user.eyesColor;
+    });
+
+    var filteredMages = sameCoatMages.concat(sameEyesMages);
+
+    var uniqueMages = filteredMages.filter(function (it, i) {
+      return filteredMages.indexOf(it) === i;
+    });
+
+    render(uniqueMages);
+  };
+
   // Загружаем данные и при положительном результате отрисовываем волшебников
-  window.backend.load(render, window.utils.onError);
+  window.backend.load(successHandler, window.utils.onError);
 
   // Для передачи в другие модули
   window.wizards = {
     show: showMages,
+    update: update,
   };
 })();

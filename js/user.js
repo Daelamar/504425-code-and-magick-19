@@ -31,31 +31,35 @@
   ];
 
   // Создаем массив цветов для мантии
-  var mantleColors = [
-    'rgb(101, 137, 164)',
-    'rgb(241, 43, 107)',
+  var COAT_COLORS = [
     'rgb(146, 100, 161)',
-    'rgb(56, 159, 117)',
     'rgb(215, 210, 55)',
+    'rgb(241, 43, 107)',
+    'rgb(101, 137, 164)',
     'rgb(0, 0, 0)',
+    'rgb(215, 210, 55)',
+    'rgb(56, 159, 117)',
+    'rgb(241, 43, 107)',
   ];
 
   // Создаем массив цветов для глаз
-  var eyeColors = [
-    'black',
+  var EYES_COLORS = [
     'red',
-    'blue',
+    'orange',
     'yellow',
     'green',
+    'lightblue',
+    'blue',
+    'purple',
   ];
 
   // Присваеваем переменной вызов функции и передаем параметры для создания окружения на момент вызова
   // Для цвета фаербола
   var getNextFireballColor = window.utils.getNextNumberFromArray(fireballColors, -1);
   // Для цвета глаз
-  var getNextEyeColor = window.utils.getNextNumberFromArray(eyeColors, -1);
+  var getNextEyeColor = window.utils.getNextNumberFromArray(EYES_COLORS, -1);
   // Для цвета мантии
-  var getNextMantleColor = window.utils.getNextNumberFromArray(mantleColors, -1);
+  var getNextMantleColor = window.utils.getNextNumberFromArray(COAT_COLORS, -1);
 
   // Функция валидности поля имени
   var nameFieldValidityHandler = function (evt) {
@@ -78,25 +82,39 @@
     }
   });
 
+
   wizardFireballElement.addEventListener('click', function () {
     wizardFireballElement.style.background = getNextFireballColor();
     wizardFireballInputElement.value = wizardFireballElement.style.background;
   });
 
+
+  // Объявляем переменную для сохранения текущего цвета мантии
+  var coatColor;
   wizardCoatElement.addEventListener('click', function () {
-    wizardCoatElement.style.fill = getNextMantleColor();
+    var newColor = getNextMantleColor();
+    wizardCoatElement.style.fill = newColor;
     wizardCoatInputElement.value = wizardCoatElement.style.fill;
+    coatColor = newColor;
+    window.wizards.update();
   });
 
+  // Объявляем переменную для сохранения текущего цвета глаз
+  var eyesColor;
   wizardEyesElement.addEventListener('click', function () {
-    wizardEyesElement.style.fill = getNextEyeColor();
+    var newColor = getNextEyeColor();
+    wizardEyesElement.style.fill = newColor;
     wizardEyesInputElement.value = wizardEyesElement.style.fill;
+    eyesColor = newColor;
+    window.wizards.update();
   });
 
   // Для передачи в другие модули
   window.user = {
     validate: nameFieldValidityHandler,
-    mantleColors: mantleColors,
-    eyeColors: eyeColors,
+    mantleColors: COAT_COLORS,
+    eyeColors: EYES_COLORS,
+    coatColor: coatColor,
+    eyesColor: eyesColor,
   };
 })();
