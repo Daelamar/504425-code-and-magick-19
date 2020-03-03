@@ -16,52 +16,10 @@
   // Пустой массив для сохранения данных о магах
   var similarMages = [];
 
-  /*
-  // Создаем массив имен похожих магов
-  var names = [
-    'Иван',
-    'Хуан Себастьян',
-    'Мария',
-    'Кристоф',
-    'Виктор',
-    'Юлия',
-    'Люпита',
-    'Вашингтон',
-  ];
-
-  // Создаем массив фамилий похожих магов
-  var secondNames = [
-    'да Марья',
-    'Верон',
-    'Мирабелла',
-    'Вальц',
-    'Онопко',
-    'Топольницкая',
-    'Нионго',
-    'Ирвинг',
-  ];
-   */
-
   // Функция открытия окна похожих магов
   var showMages = function () {
     magesFieldElement.classList.remove('hidden');
   };
-
-  /*
-  // Функция создания похожих магов и добавления их в массив
-  var create = function (number) {
-    var wizardsArr = [];
-    for (var i = 1; i <= number; i++) {
-      var wizard = {
-        name: window.utils.getRandomItem(names) + ' ' + window.utils.getRandomItem(secondNames),
-        coatColor: window.utils.getRandomItem(window.user.mantleColors),
-        eyesColor: window.utils.getRandomItem(window.user.eyeColors),
-      };
-      wizardsArr.push(wizard);
-    }
-    return wizardsArr;
-  };
-*/
 
   // Функция заполнения html-элементов похожего мага ( цвет,имя и т.д )
   var createElements = function (wizard) {
@@ -69,7 +27,7 @@
 
     wizardElement.querySelector('.setup-similar-label').textContent = wizard.name;
     wizardElement.querySelector('.wizard-coat').style.fill = wizard.colorCoat; // Переделали, так как в данных сервера именно такое свойство
-    wizardElement.querySelector('.wizard-eyes').style.fill = wizard.eyesColor; // Белым цветом потому, что пока этих данных нет, но они придут с сервера
+    wizardElement.querySelector('.wizard-eyes').style.fill = wizard.colorEyes; // Белым цветом потому, что пока этих данных нет, но они придут с сервера
 
     return wizardElement;
   };
@@ -90,21 +48,26 @@
     update();
   };
 
+  // Функция установки ранга похожим магам
+  var getRank = function (mage) {
+    var rank = 0;
+    if (mage.colorCoat === window.user.coatColor) {
+      rank += 2;
+    }
+    if (mage.colorEyes === window.user.eyesColor) {
+      rank += 1;
+    }
+    return rank;
+  };
+
   var update = function () {
-    var sameCoatMages = similarMages.filter(function (it) {
-      return it.colorCoat === window.user.coatColor;
-    });
-    var sameEyesMages = similarMages.filter(function (it) {
-      return it.colorEyes === window.user.eyesColor;
-    });
-
-    var filteredMages = sameCoatMages.concat(sameEyesMages);
-
-    var uniqueMages = filteredMages.filter(function (it, i) {
-      return filteredMages.indexOf(it) === i;
-    });
-
-    render(uniqueMages);
+    render(similarMages.slice().sort(function (left, right) {
+      var rankDiff = getRank(right) - getRank(left);
+      if (rankDiff === 0) {
+        rankDiff = similarMages.indexOf(left) - similarMages.indexOf(right);
+      }
+      return rankDiff;
+    }));
   };
 
   // Загружаем данные и при положительном результате отрисовываем волшебников

@@ -4,6 +4,17 @@
   var ESC_KEY_CODE = 27;
   var ENTER_KEY_CODE = 13;
 
+  var DEBOUNCE_INTERVAL = 300; // ms
+
+  var lastTimeout;
+
+  var debounceHandler = function (cb) {
+    if (lastTimeout) {
+      window.clearTimeout(lastTimeout);
+    }
+    lastTimeout = window.setTimeout(cb, DEBOUNCE_INTERVAL);
+  };
+
   // Функция случайного числа в диапазоне
   var getRandomNumber = function (min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -56,5 +67,6 @@
     onError: showErrorMessageHandler,
     ESC_KEY_CODE: ESC_KEY_CODE,
     ENTER_KEY_CODE: ENTER_KEY_CODE,
+    debounce: debounceHandler,
   };
 })();

@@ -90,23 +90,23 @@
 
 
   // Объявляем переменную для сохранения текущего цвета мантии
-  var coatColor;
+  var coatColor = COAT_COLORS[0];
   wizardCoatElement.addEventListener('click', function () {
     var newColor = getNextMantleColor();
-    wizardCoatElement.style.fill = newColor;
+    this.style.fill = newColor;
     wizardCoatInputElement.value = wizardCoatElement.style.fill;
     coatColor = newColor;
-    window.wizards.update();
+    window.utils.debounce(window.wizards.update);
   });
 
   // Объявляем переменную для сохранения текущего цвета глаз
-  var eyesColor;
+  var eyesColor = EYES_COLORS[0];
   wizardEyesElement.addEventListener('click', function () {
     var newColor = getNextEyeColor();
-    wizardEyesElement.style.fill = newColor;
+    this.style.fill = newColor;
     wizardEyesInputElement.value = wizardEyesElement.style.fill;
     eyesColor = newColor;
-    window.wizards.update();
+    window.utils.debounce(window.wizards.update);
   });
 
   // Для передачи в другие модули
