@@ -37,7 +37,7 @@
     var fragment = document.createDocumentFragment();
     listElement.innerHTML = '';
     for (var t = 0; t < MAX_MAGES_COUNT; t++) {
-      fragment.appendChild(createElements(window.utils.getRandomItem(wizardObjects)));
+      fragment.appendChild(createElements(wizardObjects[t]));
     }
     listElement.appendChild(fragment);
   };

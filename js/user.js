@@ -88,33 +88,40 @@
     wizardFireballInputElement.value = wizardFireballElement.style.background;
   });
 
-
   // Объявляем переменную для сохранения текущего цвета мантии
-  var coatColor = COAT_COLORS[0];
+  var coatColor = wizardCoatElement.style.fill;
   wizardCoatElement.addEventListener('click', function () {
-    var newColor = getNextMantleColor();
-    this.style.fill = newColor;
+    coatColor = getNextMantleColor();
+    wizardCoatElement.style.fill = coatColor;
     wizardCoatInputElement.value = wizardCoatElement.style.fill;
-    coatColor = newColor;
+    getCoatColor(coatColor);
     window.utils.debounce(window.wizards.update);
   });
 
   // Объявляем переменную для сохранения текущего цвета глаз
-  var eyesColor = EYES_COLORS[0];
+  var eyesColor = wizardEyesElement.style.fill;
   wizardEyesElement.addEventListener('click', function () {
-    var newColor = getNextEyeColor();
-    this.style.fill = newColor;
+    eyesColor = getNextEyeColor();
+    wizardEyesElement.style.fill = eyesColor;
     wizardEyesInputElement.value = wizardEyesElement.style.fill;
-    eyesColor = newColor;
+    getEyeColor(eyesColor);
     window.utils.debounce(window.wizards.update);
   });
+
+  var getCoatColor = function () {
+    return coatColor;
+  };
+
+  var getEyeColor = function () {
+    return eyesColor;
+  };
 
   // Для передачи в другие модули
   window.user = {
     validate: nameFieldValidityHandler,
     mantleColors: COAT_COLORS,
     eyeColors: EYES_COLORS,
-    coatColor: coatColor,
-    eyesColor: eyesColor,
+    coatColor: getCoatColor,
+    eyesColor: getEyeColor,
   };
 })();
