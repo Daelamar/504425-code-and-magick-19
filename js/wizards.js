@@ -51,10 +51,10 @@
   // Функция установки ранга похожим магам
   var getRank = function (mage) {
     var rank = 0;
-    if (mage.colorCoat === window.user.coatColor) {
+    if (mage.colorCoat === window.user.getCoatColor()) {
       rank += 2;
     }
-    if (mage.colorEyes === window.user.eyesColor) {
+    if (mage.colorEyes === window.user.getEyeColor()) {
       rank += 1;
     }
     return rank;

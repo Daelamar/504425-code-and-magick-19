@@ -94,7 +94,6 @@
     coatColor = getNextMantleColor();
     wizardCoatElement.style.fill = coatColor;
     wizardCoatInputElement.value = wizardCoatElement.style.fill;
-    getCoatColor(coatColor);
     window.utils.debounce(window.wizards.update);
   });
 
@@ -104,7 +103,6 @@
     eyesColor = getNextEyeColor();
     wizardEyesElement.style.fill = eyesColor;
     wizardEyesInputElement.value = wizardEyesElement.style.fill;
-    getEyeColor(eyesColor);
     window.utils.debounce(window.wizards.update);
   });
 
@@ -121,7 +119,7 @@
     validate: nameFieldValidityHandler,
     mantleColors: COAT_COLORS,
     eyeColors: EYES_COLORS,
-    coatColor: getCoatColor,
-    eyesColor: getEyeColor,
+    getCoatColor: getCoatColor,
+    getEyeColor: getEyeColor,
   };
 })();
